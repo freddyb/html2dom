@@ -1,12 +1,11 @@
 nodes = []
 	function html2dom(htmlsource) {
-	/* 
+	/*
 	*
 	*
 	*
 	* There is no guarantee as to what might happen if the things supplied to html2dom are not valid html.
 	*/
-
 	function nextId(name) {
 		name = name.replace(/[^a-zA-Z]/,"")
 		name = name.toLowerCase(); // use appropriate CamelCase or whatever coding guidelines say
@@ -19,13 +18,12 @@ nodes = []
 		else {
 			ids[name] = [name+'_0'];
 			return name+'_0'
-		
+
 		}
 	}
 	function escSingleQuote(t) {
-		return t.replace("'", "\'"); 
+		return t.replace("'", "\'");
 	}
-
 	function newElement(node_var,node_name) {
 		src += ("\n"+node_var+ " = document.createElement('" + node_name +"');\n");
 	}
@@ -54,7 +52,7 @@ nodes = []
 			nodes.push(node);
 			var nodeDescr = nodelist[i] +', name: '+ node.nodeName + ', type:' + node.nodeType;
 			if (node.nodeValue != null) {
-				nodeDescr += ', value:' + node.nodeValue.toSource();	
+				nodeDescr += ', value:' + node.nodeValue.toSource();
 			}
 			console.log("Trying to insert: "+ nodeDescr);
 			if (node.nodeType == Node.ELEMENT_NODE) { // ELEMENT_NODE == 1
@@ -80,32 +78,32 @@ nodes = []
 		   	 	if (!(/^\s+$/.test(node.textContent))) {
 		   	 		// skip empty text
 		   	 		var node_var = nextId(node.nodeName);
-		   			newText(node_var, node.textContent); 
-		   			if (parent != undefined) { appendToParent(parent,node_var); }		   
+		   			newText(node_var, node.textContent);
+		   			if (parent != undefined) { appendToParent(parent,node_var); }
 		   		}
 		   }
 		   else if (node.nodeType == Node.COMMENT_NODE){ // 3
 		   		var node_var = nextId(node.nodeName);
-		   		newComment(node_var, node.nodeValue); 
-		   		if (parent != undefined) { appendToParent(parent,node_var); }		   
-		   }	   
+		   		newComment(node_var, node.nodeValue);
+		   		if (parent != undefined) { appendToParent(parent,node_var); }
+		   }
 		   else {
 			   console.log("Unknown Node Type: " + nodeDescr );
 		   }
-		
+
 		}
 		if (typeof nodeDescr != "undefined") { // else we iterated over an empty list
-			console.log("done wakling in node:" + nodeDescr);	
+			console.log("done wakling in node:" + nodeDescr);
 		}
 	}
 
-	
+
 
 
 	function init(s) {// init
 		cnt = 0;
 		ids = {};
-		src = ""		
+		src = ""
 		//if ((typeof document != "undefined") && (document instanceof HTMLDocument)) {
 		//	doc = document.createDocumentFragment(s);
 		//}
