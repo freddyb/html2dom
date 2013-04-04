@@ -17,7 +17,7 @@ Let's use html2dom for that!
 // this returns a stupid javascript object:
 h2d = html2dom('<p>Hello<b>World</b</p>');
 
-// it's res attribute contains the generated JavaScript source code:
+// its 'res' attribute contains the generated JavaScript source code:
 console.log(h2d.res);
 ```
 
