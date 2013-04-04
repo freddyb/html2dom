@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html
+    <head>
+       	<meta http-equiv="Content-Type" content="text/xhtml;charset=utf-8" />
+        <title></title>
+        <script src="js/main.js"></script>
+<!-- 
+most HTML and script-things <del>stolen</del>adapted from mario's innerHTML test-tool,
+at html5sec.org/innerhtml - thaaaaanks :D
+-->
+<style>
+#domjs, #resulthtml, #html {width:100%;height:175px;overflow-y:scroll}
+iframe#iframe {display:none; width:100%; overflow-y:scroll;}
+</style>
+</head>
+<body>
+<button onclick="tutorial()">Tutorial</button>
+<hr />
+<textarea id="html"></textarea>
+<hr />
+<button onclick="parseHTML()">HTML->DOM calls</button>
+<button onclick="evalParsedHTML()">show parsed HTML source</button>
+<button onclick="viewHTML()">view parsed HTML</button>
+<hr />
+<textarea id="domjs"></textarea>
+<hr />
+<textarea id="resulthtml"></textarea>
+<hr />
+<iframe id="iframe" src="#"></iframe>
+<script>
+var html = document.getElementById('html');
+var domjs = document.getElementById('domjs');
+var iframe = document.getElementById('iframe');
+var resulthtml = document.getElementById('resulthtml');
+
+location.hash.length > 1 ? html.value = location.hash.slice(1) : false; 
+location.hash = '';
+
+var updateCanvas = function(e){
+	if(e && e.keyCode && (e.keyCode == 27 || e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40 || e.keyCode == 35 || e.keyCode == 35)) {
+		return false;
+		// this halts on arrow-key presses and escape and so on,
+		// added 36,35 i.e., home/end keys
+	}
+	// saving state via url...
+    location.hash=html.value; // a little document.write() backup
+};
+html.onkeyup = updateCanvas;
+window.onload = updateCanvas;
+</script>
+
+</body>
+</html>
