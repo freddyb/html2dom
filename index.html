@@ -40,13 +40,13 @@ location.hash.length > 1 ? html.value = location.hash.slice(1) : false;
 location.hash = '';
 
 var updateCanvas = function(e){
-    if(e && e.keyCode && (e.keyCode == 27 || e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40 || e.keyCode == 35 || e.keyCode == 35)) {
-        return false;
-        // this halts on arrow-key presses and escape and so on,
-        // added 36,35 i.e., home/end keys
-    }
-    // saving state via url...
-    location.hash=html.value; // a little document.write() backup
+  if(e && e.keyCode && (e.keyCode == 27 || e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40 || e.keyCode == 35 || e.keyCode == 35)) {
+    return false;
+    // this halts on arrow-key presses and escape and so on,
+    // added 36,35 i.e., home/end keys
+  }
+  // saving state via url...
+  location.hash=html.value; // a little document.write() backup
 };
 html.onkeyup = updateCanvas;
 window.onload = updateCanvas;
