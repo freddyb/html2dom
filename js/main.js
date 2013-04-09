@@ -1,5 +1,9 @@
 //nodes = []; // debug
 function parseHTML() {
+  if (/^\S*$/.test(document.querySelector("#html").value)) {
+    alert("You did not supply any HTML code...")
+    return
+  }
   x = html2dom(document.querySelector("#html").value);
   document.querySelector("#domjs").value = x.res;
 }
