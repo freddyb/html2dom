@@ -1,4 +1,3 @@
-nodes = []
 var html2dom = (function() {
   /*
   * There is no guarantee as to what might happen if the things supplied to html2dom are not valid html.
@@ -11,11 +10,12 @@ var html2dom = (function() {
   var src = ""
   var parentName;
   return { parse: parse };
+
   function parse(htmlsource) {
     if (typeof DOMParser == "function") {
       // a bit more heavy-weight and Firefox only (this is OK for b2g things ;))
       var parser = new DOMParser();
-      doc = parser.parseFromString(htmlsource, "text/html");
+      var doc = parser.parseFromString(htmlsource, "text/html");
     }
     else {
       throw Error("Your JS environment doesn't come with either of the supported parsers (document.createDocumentFragment or DOMParser)");
@@ -31,7 +31,7 @@ function mkId(node) {
   //TODO: replace with WeakMap, once browser support it.
     Object.defineProperty(node, "h2d_nodeID", {configurable:true, writable:true}) // this looks like an awful hack. in fact...it is! :/
     if (name in ids) {
-      i = ids[name].length;
+      var i = ids[name].length;
       ids[name].push(name +'_'+i);
       node.h2d_nodeID = name +'_'+i;
     }
@@ -75,10 +75,9 @@ function mkId(node) {
   }
 
   function walkNodes(root) {
-    iter = document.createNodeIterator(root);
+    var iter = document.createNodeIterator(root);
     var node;
     while (node = iter.nextNode()) {
-      nodes.push(node)
         var nodeDescr = node +', name: '+ node.nodeName + ', type: ' + node.nodeType;
         if (node.nodeValue != null) {
           nodeDescr += ', value:' + node.nodeValue.toSource();
