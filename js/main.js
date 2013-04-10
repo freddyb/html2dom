@@ -1,15 +1,15 @@
-//nodes = []; // debug
+nodes = []; // debug
 function parseHTML() {
   if (/^\S*$/.test(document.querySelector("#html").value)) {
     alert("You did not supply any HTML code...")
     return
   }
-  x = html2dom(document.querySelector("#html").value);
+  var x = html2dom(document.querySelector("#html").value);
   document.querySelector("#domjs").value = x.res;
 }
 function evalParsedHTML() {
   parseHTML();
-  eval(x.res);// magic :D
+  eval(document.querySelector("#domjs").value);// magic :D
   while (iframe.contentWindow.document.body.hasChildNodes()) {
       iframe.contentWindow.document.body.removeChild(
         iframe.contentWindow.document.body.firstChild
@@ -41,10 +41,14 @@ function compareNodes() {
   var i_parser = new DOMParser()
   i_doc = i_parser.parseFromString(html.value, "text/html");
 
-  if (i_doc.body.outerHTML == r_doc.body.outerHTML) {
+  if (r_doc.body.outerHTML.replace(/\s/g,"") == i_doc.body.outerHTML.replace(/\s/g,"")) {
+    // disregard *all* whitespaces. pretty daring, eh? :/
     alert("All nodes equal, yay :)");
   }
   else {
+    //XXX do something clever, compare node-wise :p
+    //    hint: nodes are not equal by node.isEqualNode(othernode) if children differ,
+    //    hence just walking until a non-equal case was found doesnt work.
     alert("Result is not equal to the input HTML :(\nPlease file a bug!");
   }
 }
