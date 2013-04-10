@@ -38,7 +38,7 @@ var domjs = document.getElementById('domjs');
 var iframe = document.getElementById('iframe');
 var resulthtml = document.getElementById('resulthtml');
 
-location.hash.length > 1 ? html.value = location.hash.slice(1) : false;
+location.hash.length > 1 ? html.value = unescape(location.hash.slice(1)) : false;
 location.hash = '';
 
 var updateCanvas = function(e){
@@ -48,7 +48,7 @@ var updateCanvas = function(e){
     // added 36,35 i.e., home/end keys
   }
   // saving state via url...
-  location.hash=html.value; // a little document.write() backup
+  location.hash = html.value; // a little document.write() backup
 };
 html.onkeyup = updateCanvas;
 window.onload = updateCanvas;
