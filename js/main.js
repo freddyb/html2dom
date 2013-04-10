@@ -4,8 +4,8 @@ function parseHTML() {
     alert("You did not supply any HTML code...")
     return
   }
-  var x = html2dom(document.querySelector("#html").value);
-  document.querySelector("#domjs").value = x.res;
+  var x = html2dom.parse(document.querySelector("#html").value);
+  document.querySelector("#domjs").value = x;
 }
 function evalParsedHTML() {
   parseHTML();

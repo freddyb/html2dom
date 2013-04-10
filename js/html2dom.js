@@ -1,5 +1,5 @@
 nodes = []
-function html2dom(htmlsource) {
+var html2dom = (function() {
   /*
   * There is no guarantee as to what might happen if the things supplied to html2dom are not valid html.
   * It's also fairly certain that your html will be mutated. Attributes might shift positions and attribute
@@ -10,10 +10,25 @@ function html2dom(htmlsource) {
   var ids = {};
   var src = ""
   var parentName;
-  function mkId(node) {
-    var name = node.nodeName.replace(/[^a-zA-Z]/,"")
-    name = name.toLowerCase(); //XXX use appropriate CamelCase or whatever coding guidelines say      cnt++;
-    //TODO: replace with WeakMap, once browser support it.
+  return { parse: parse };
+  function parse(htmlsource) {
+    if (typeof DOMParser == "function") {
+      // a bit more heavy-weight and Firefox only (this is OK for b2g things ;))
+      var parser = new DOMParser();
+      doc = parser.parseFromString(htmlsource, "text/html");
+    }
+    else {
+      throw Error("Your JS environment doesn't come with either of the supported parsers (document.createDocumentFragment or DOMParser)");
+    }
+    //TODO work around the body thing...
+    walkNodes(doc.body); // using body because domparser always creates html, head, body
+    return src;
+  }
+
+function mkId(node) {
+  var name = node.nodeName.replace(/[^a-zA-Z]/,"")
+  name = name.toLowerCase(); //XXX use appropriate CamelCase or whatever coding guidelines say      cnt++;
+  //TODO: replace with WeakMap, once browser support it.
     Object.defineProperty(node, "h2d_nodeID", {configurable:true, writable:true}) // this looks like an awful hack. in fact...it is! :/
     if (name in ids) {
       i = ids[name].length;
@@ -25,8 +40,11 @@ function html2dom(htmlsource) {
       node.h2d_nodeID = name+'_0';
     }
   }
-  function escSingleQuote(t) {
-    return t.replace("'", "\'");
+  function strToSrc(s) {
+    // String.toSource() gives us (new String("foobar")), this is a bit ugly.
+    // the upside is, that it does string escaping for us.
+    // so we use String.toSource() and regex-search for the inner part.
+    return ( s.toSource() ).match(/\(new String\((.+)\)\)/)[1];
   }
   function newElement(node , el_name) {
     if (!("h2d_nodeID" in node)) { mkId(node); }
@@ -42,15 +60,15 @@ function html2dom(htmlsource) {
     if (attr == "style") { //XXX use a more generic way than this hard coded blacklist
       src += "//XXX CSP will forbid inline styles. Use ``"+ node.h2d_nodeID + ".style'' instead of setAttribute.\n";
     }
-      src += ( node.h2d_nodeID + ".setAttribute(" + attr.toSource() + ","+ val.toSource() +");\n");
+      src += ( node.h2d_nodeID + ".setAttribute(" + strToSrc(attr) + ","+ strToSrc(val) +");\n");
   }
   function newText(node, text) {
     if (!("h2d_nodeID" in node)) { mkId(node); }
-    src += (node.h2d_nodeID + " = document.createTextNode(" +  text.toSource() +");\n");
+    src += (node.h2d_nodeID + " = document.createTextNode(" +  strToSrc(text) +");\n");
   }
   function newComment(node, cmt) {
     if (!("h2d_nodeID" in node)) { mkId(node); }
-   src += (node.h2d_nodeID +" = document.createComment(" +  cmt.toSource() +");\n");
+   src += (node.h2d_nodeID +" = document.createComment(" +  strToSrc(cmt) +");\n");
   }
   function appendToParent(par, node) {
     src += (par+".appendChild("+ node.h2d_nodeID +");\n");
@@ -104,20 +122,4 @@ function html2dom(htmlsource) {
         }
       }
     }
-  function init(s) {
-      if (typeof DOMParser == "function") {
-          // a bit more heavy-weight and Firefox only (this is OK for b2g things ;))
-          var parser = new DOMParser();
-          doc = parser.parseFromString(s, "text/html");
-      }
-      else {
-          throw Error("Your JS environment doesn't come with either of the supported parsers (document.createDocumentFragment or DOMParser)");
-      }
-      walkNodes(doc.body); // using body because domparser always creates html, head, body
-      //XXX work around the body thing...
-  }
-  init(htmlsource);
-
-  returnObj = { res: src, mkId : mkId };
-  return returnObj;
-}
+})();
