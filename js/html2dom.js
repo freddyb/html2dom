@@ -85,7 +85,6 @@ function mkId(node) {
         if (node == root) {
           if (src.indexOf("docFragment") != 0) {
             src += "docFragment = document.createDocumentFragment(); // contains all gathered nodes\n";
-            var parentName = "docFragment";
             // set fixed id (hackish..)...
             Object.defineProperty(node, "h2d_nodeID", {configurable:true, writable:true})
             node.h2d_nodeID = "docFragment";
