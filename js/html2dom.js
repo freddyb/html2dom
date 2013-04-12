@@ -57,6 +57,7 @@ function mkId(node) {
     src += ("\nvar " + node.h2d_nodeID + " = document.createElement('" + el_name +"');\n");
   }
   function newAttribute(node, attr,val) {
+    /XXX TODO: use el.id = .. instead of el.setAttribute("id", ..) for those attributes that allow it.
     if (attr.indexOf("on") == 0) { //XXX use a more generic way than this hard coded blacklist
       src += "//XXX CSP will forbid inline JavaScript and event handlers. Use addEventHandler instead!\n";
     }
