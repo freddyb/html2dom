@@ -54,7 +54,7 @@ function mkId(node) {
     if (el_name == "script") { //XXX use a more generic way than this hard coded blacklist
       src += "//XXX CSP will forbid inline JavaScript.\n";
     }
-    src += ("\n" + node.h2d_nodeID + " = document.createElement('" + el_name +"');\n");
+    src += ("\nvar " + node.h2d_nodeID + " = document.createElement('" + el_name +"');\n");
   }
   function newAttribute(node, attr,val) {
     if (attr.indexOf("on") == 0) { //XXX use a more generic way than this hard coded blacklist
@@ -67,11 +67,11 @@ function mkId(node) {
   }
   function newText(node, text) {
     if (!("h2d_nodeID" in node)) { mkId(node); }
-    src += (node.h2d_nodeID + " = document.createTextNode(" +  strToSrc(text) +");\n");
+    src += ("var "+node.h2d_nodeID + " = document.createTextNode(" +  strToSrc(text) +");\n");
   }
   function newComment(node, cmt) {
     if (!("h2d_nodeID" in node)) { mkId(node); }
-   src += (node.h2d_nodeID +" = document.createComment(" +  strToSrc(cmt) +");\n");
+   src += ("var "+node.h2d_nodeID +" = document.createComment(" +  strToSrc(cmt) +");\n");
   }
   function appendToParent(par, node) {
     src += (par+".appendChild("+ node.h2d_nodeID +");\n");
@@ -87,7 +87,7 @@ function mkId(node) {
         }
         if (node == root) {
           if (src.indexOf("docFragment") != 0) {
-            src += "docFragment = document.createDocumentFragment(); // contains all gathered nodes\n";
+            src += "var docFragment = document.createDocumentFragment(); // contains all gathered nodes\n";
             // set fixed id (hackish..)...
             Object.defineProperty(node, "h2d_nodeID", {configurable:true, writable:true})
             node.h2d_nodeID = "docFragment";
