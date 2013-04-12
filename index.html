@@ -14,20 +14,24 @@ at html5sec.org/innerhtml - thaaaaanks :D
 <style>
 #domjs, #resulthtml, #html {width:100%;height:175px;overflow-y:scroll}
 iframe#iframe {display:none; width:100%; overflow-y:scroll;}
+.tutorial { font-style: italic; font-size: small; display:none;}
 </style>
 </head>
 <body>
-    <button onclick="tutorial()">Tutorial</button>
+    <button onclick="tutorial()">Tutorial</button><span class="tutorial">&nbsp;Modify or enter some custom HTML below.</span>
 <hr />
 <textarea id="html"></textarea>
-<button onclick="parseHTML()" title="generates JS code from your HTML mark-up">html2dom&blacktriangledown;</button>
+<button onclick="parseHTML()" title="generates JS code from your HTML mark-up">html2dom&blacktriangledown;</button><span class="tutorial">&nbsp;Generate DOM methods that would generate the given HTML source code..</span>
 <hr />
 <textarea id="domjs"></textarea>
-<button onclick="evalParsedHTML()" titles="generate HTML code by calling eval()">try the html2dom result&blacktriangledown;</button>
-<button onclick="compareNodes()" title="check if our JS generated HTML that looks like yours">compare input/result HTML&diams;</button>
+<button onclick="evalParsedHTML()" title="generate HTML code by calling eval()">try executing the html2dom result&blacktriangledown;</button>
+<span class="tutorial">&nbsp;View the HTML that would result from executing the JavaScript code from above.</span>
 <hr />
 <textarea id="resulthtml"></textarea>
 <button onclick="viewHTML()" title="render our generated HTML">preview HTML&blacktriangledown;</button>
+<button onclick="compareNodes()" title="check if our JS generated HTML that looks like yours">compare input/result HTML&diams;</button><br>
+<span class="tutorial">&nbsp;Preview the the HTML from above (images and styles are likely broken if URLs were relative or compare if the both HTML source code are the same.</span><br>
+
 <hr />
 <iframe id="iframe" src="data:text/html;charset=utf-8,<div id='container'></div>" sandbox="allow-same-origin"></iframe>
 

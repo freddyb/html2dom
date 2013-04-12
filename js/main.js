@@ -1,9 +1,5 @@
 // nodes = []; // debug
 function parseHTML() {
-  if (/^\S*$/.test(document.querySelector("#html").value)) {
-    alert("You did not supply any HTML code...")
-    return
-  }
   document.querySelector("#domjs").style.border = "";
   var x = html2dom.parse(document.querySelector("#html").value);
   document.querySelector("#domjs").value = x;
@@ -29,16 +25,15 @@ function viewHTML() {
 }
 
 function tutorial() {
+  tutspanList = document.querySelectorAll('.tutorial');
+  for (var i=0; i< tutspanList.length; i++) {
+    tutspanList[i].style.display = "inline";
+  }
   var tutsrc = '<table border=4 cellspacing=4 cellpadding=4><tr><td bgcolor="#ffff00">yellow stars<td bgcolor="#00ff00">green clovers</tr><tr><td bgcolor="#ff00ff">purple moons<td bgcolor="00ffff">blue something or other...</td></tr></table>';
   document.querySelector("#html").value = tutsrc;
-  alert("Now play with the three buttons below 'your' HTML markup.");
 }
 
 function compareNodes() {
-  if (/^\S*$/.test(resulthtml.value) || /^\S*$/.test(html.value)) {
-    alert("One of the HTML textareas is empty..");
-    return;
-  }
   // parse both strings into a DOM, this helps us with element attribute re-ordering
   var r_parser = new DOMParser()
   var r_doc = r_parser.parseFromString(resulthtml.value, "text/html");
