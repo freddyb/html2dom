@@ -1,3 +1,4 @@
+// nodes = []; // debug
 function parseHTML() {
   if (/^\S*$/.test(document.querySelector("#html").value)) {
     alert("You did not supply any HTML code...")
@@ -9,13 +10,11 @@ function parseHTML() {
 function evalParsedHTML() {
   parseHTML();
   eval(document.querySelector("#domjs").value);// magic :D
-  while (iframe.contentWindow.document.body.hasChildNodes()) {
-      iframe.contentWindow.document.body.removeChild(
-        iframe.contentWindow.document.body.firstChild
-        );
-  }
-  iframe.contentWindow.document.body.appendChild(docFragment);
-  document.querySelector("#resulthtml").value = iframe.contentWindow.document.body.innerHTML;
+  var iframe = document.querySelector("#iframe");
+  iframe.location = 'data:text/html,<div id="container"></div>#' + (Math.random()).toString(36) // new URI = new (empty) document
+  iframe.contentWindow.container.appendChild(docFragment);
+  // ^--- once we do this, there might not be a body element anymore :S
+  document.querySelector("#resulthtml").value = iframe.contentWindow.container.innerHTML;
 }
 
 function viewHTML() {
@@ -30,24 +29,45 @@ function tutorial() {
 }
 
 function compareNodes() {
+  if (iframe.style.display == "block") {
+    alert("Comparison breaks once active content in the HTML has been rendered. Reload this page and try again from scratch, but this time, don't render the HTML..");
+    return;
+  }
   if (/^\S*$/.test(resulthtml.value) || /^\S*$/.test(html.value)) {
     alert("One of the HTML textareas is empty..");
     return;
   }
+  // parse both strings into a DOM, this helps us with element attribute re-ordering
   var r_parser = new DOMParser()
-  r_doc = r_parser.parseFromString(resulthtml.value, "text/html");
+  var r_doc = r_parser.parseFromString(resulthtml.value, "text/html");
 
   var i_parser = new DOMParser()
-  i_doc = i_parser.parseFromString(html.value, "text/html");
+  var i_doc = i_parser.parseFromString(html.value, "text/html");
 
   if (r_doc.body.outerHTML.replace(/\s/g,"") == i_doc.body.outerHTML.replace(/\s/g,"")) {
     // disregard *all* whitespaces. pretty daring, eh? :/
-    alert("All nodes equal, yay :)");
+    document.querySelector("#domjs").style.border = "1px solid lightgreen"
+    document.querySelector("#resulthtml").style.border = "1px solid lightgreen"
   }
   else {
     //XXX do something clever, compare node-wise :p
     //    hint: nodes are not equal by node.isEqualNode(othernode) if children differ,
     //    hence just walking until a non-equal case was found doesnt work.
+
+    /*var r_iter = document.createNodeIterator(r_doc.body);
+    var i_iter = document.createNodeIterator(i_doc.body);
+    var r_node, i_node;
+    console.group("diffnodes");
+    var k = 0;
+    while (r_node = r_iter.nextNode()) {
+      i_node = i_iter.nextNode();
+
+      if ( (r_node.hasChildNodes()) && (! (r_node.isEqualNode(i_node)) )) {
+        k++;
+        if (k < 10) { console.log("nodes", r_node, i_node); }
+      }
+    }
+    console.groupEnd(); */
     alert("Result is not equal to the input HTML :(\nPlease file a bug!");
   }
 }

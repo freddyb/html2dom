@@ -9,7 +9,7 @@ var html2dom = (function() {
   var ids = {};
   var src = ""
   var parentName;
-  return { parse: parse };
+  return { parse: parse, strToSrc: strToSrc };
 
   function parse(htmlsource) {
     if (typeof DOMParser == "function") {
@@ -26,18 +26,21 @@ var html2dom = (function() {
   }
 
 function mkId(node) {
-  var name = node.nodeName.replace(/[^a-zA-Z]/,"")
+  var name = node.nodeName.replace(/[^a-zA-Z0-9]/g,"");
+  if ((node.nodeType == Node.ELEMENT_NODE) && (node.hasAttribute("id"))) {
+    var name = node.id.replace(/[^a-zA-Z0-9]/g,"");
+  }
   name = name.toLowerCase(); //XXX use appropriate CamelCase or whatever coding guidelines say      cnt++;
-  //TODO: replace with WeakMap, once browser support it.
+  //TODO: replace h2d_nodeID attribute with a WeakMap, once browser support it.
     Object.defineProperty(node, "h2d_nodeID", {configurable:true, writable:true}) // this looks like an awful hack. in fact...it is! :/
     if (name in ids) {
-      var i = ids[name].length;
+      var i = ids[name].length -1;
       ids[name].push(name +'_'+i);
       node.h2d_nodeID = name +'_'+i;
     }
     else {
-      ids[name] = [name+'_0'];
-      node.h2d_nodeID = name+'_0';
+      ids[name] = [name];
+      node.h2d_nodeID = name;
     }
   }
   function strToSrc(s) {
@@ -105,11 +108,12 @@ function mkId(node) {
           if (parentName != undefined) { appendToParent(parentName, node); }
         }
         else if (node.nodeType == Node.TEXT_NODE) {
-          if (/\S/.test(node.textContent)) {
-            // skips whitespace-only
+          /XXX if we skip whitespaces, comparison breaks :<
+          //if (/\S/.test(node.textContent)) {
+          // skips whitespace-only
             newText(node, node.textContent);
             if (parentName != undefined) { appendToParent(parentName, node); }
-          }
+          //}
         }
         else if (node.nodeType == Node.COMMENT_NODE){ // 3
           newComment(node, node.nodeValue);

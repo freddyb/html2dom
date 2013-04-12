@@ -21,16 +21,16 @@ iframe#iframe {display:none; width:100%; overflow-y:scroll;}
 <hr />
 <textarea id="html"></textarea>
 <hr />
-<button onclick="parseHTML()">html2dom</button>
-<button onclick="evalParsedHTML()">show parsed HTML source</button>
-<button onclick="viewHTML()">render parsed HTML</button>
-<button onclick="compareNodes()">compare input/result HTML</button>
+<button onclick="parseHTML()" title="generates JS code from your HTML mark-up">html2dom</button>
+<button onclick="evalParsedHTML()" titles="generate HTML code by calling eval()">try the html2dom result</button>
+<button onclick="compareNodes()" title="check if our JS generated HTML that looks like yours">compare input/result HTML</button>
+<button onclick="viewHTML()" title="render our generated HTML (breaks the comparison feature)">render parsed HTML</button>
 <hr />
 <textarea id="domjs"></textarea>
 <hr />
 <textarea id="resulthtml"></textarea>
 <hr />
-<iframe id="iframe" src="#"></iframe>
+<iframe id="iframe" src="data:text/html;charset=utf-8,<div id='container'></div>" sandbox="allow-same-origin"></iframe>
 
 <script>
 var html = document.getElementById('html');
