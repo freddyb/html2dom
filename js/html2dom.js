@@ -5,10 +5,6 @@ var html2dom = (function() {
     values without quotation mark will probably get quotes. Single quotes might be turned into double quotes.
   */
 
-  var cnt = 0;
-  var ids = {};
-  var src = ""
-  var parentName;
   return { parse: parse, strToSrc: strToSrc };
 
   function parse(htmlsource) {
@@ -20,6 +16,10 @@ var html2dom = (function() {
     else {
       throw Error("Your JS environment doesn't come with either of the supported parsers (document.createDocumentFragment or DOMParser)");
     }
+
+    cnt = 0;
+    ids = {};
+    src = ""
     //TODO work around the body thing...
     walkNodes(doc.body); // using body because domparser always creates html, head, body
     return src;

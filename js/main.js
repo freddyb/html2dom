@@ -8,17 +8,20 @@ function parseHTML() {
   document.querySelector("#domjs").value = x;
 }
 function evalParsedHTML() {
-  parseHTML();
-  eval(document.querySelector("#domjs").value);// magic :D
   var iframe = document.querySelector("#iframe");
-  iframe.location = 'data:text/html,<div id="container"></div>#' + (Math.random()).toString(36) // new URI = new (empty) document
-  iframe.contentWindow.container.appendChild(docFragment);
-  // ^--- once we do this, there might not be a body element anymore :S
-  document.querySelector("#resulthtml").value = iframe.contentWindow.container.innerHTML;
+  iframe.onload = function() {
+    eval(document.querySelector("#domjs").value);// magic :D
+    var iframe = document.querySelector("#iframe");
+    //iframe.location.href = 'data:text/html,<div id="container"></div>';
+    iframe.contentWindow.container.appendChild(docFragment);
+    // ^--- once we do this, there might not be a body element anymore :S
+    document.querySelector("#resulthtml").value = iframe.contentWindow.container.innerHTML;
+  };
+  iframe.contentWindow.location.reload();
 }
 
 function viewHTML() {
-  evalParsedHTML();
+  var iframe = document.querySelector("#iframe");
   iframe.style.display = "block";
 }
 
@@ -29,10 +32,6 @@ function tutorial() {
 }
 
 function compareNodes() {
-  if (iframe.style.display == "block") {
-    alert("Comparison breaks once active content in the HTML has been rendered. Reload this page and try again from scratch, but this time, don't render the HTML..");
-    return;
-  }
   if (/^\S*$/.test(resulthtml.value) || /^\S*$/.test(html.value)) {
     alert("One of the HTML textareas is empty..");
     return;
