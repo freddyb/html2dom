@@ -108,8 +108,8 @@ function mkId(node) {
           if (parentName != undefined) { appendToParent(parentName, node); }
         }
         else if (node.nodeType == Node.TEXT_NODE) {
-          /XXX if we skip whitespaces, comparison breaks :<
-          //if (/\S/.test(node.textContent)) {
+          //XXX if we skip whitespaces, comparison breaks :<
+          // if (/\S/.test(node.textContent)) {
           // skips whitespace-only
             newText(node, node.textContent);
             if (parentName != undefined) { appendToParent(parentName, node); }
