@@ -4,10 +4,13 @@ function parseHTML() {
     alert("You did not supply any HTML code...")
     return
   }
+  document.querySelector("#domjs").style.border = "";
   var x = html2dom.parse(document.querySelector("#html").value);
   document.querySelector("#domjs").value = x;
 }
 function evalParsedHTML() {
+  parseHTML();
+  document.querySelector("#resulthtml").style.border = "";
   var iframe = document.querySelector("#iframe");
   iframe.onload = function() {
     eval(document.querySelector("#domjs").value);// magic :D
@@ -45,8 +48,8 @@ function compareNodes() {
 
   if (r_doc.body.outerHTML.replace(/\s/g,"") == i_doc.body.outerHTML.replace(/\s/g,"")) {
     // disregard *all* whitespaces. pretty daring, eh? :/
-    document.querySelector("#domjs").style.border = "1px solid lightgreen"
-    document.querySelector("#resulthtml").style.border = "1px solid lightgreen"
+    document.querySelector("#domjs").style.border = "1px solid lightgreen";
+    document.querySelector("#resulthtml").style.border = "1px solid lightgreen";
   }
   else {
     //XXX do something clever, compare node-wise :p
