@@ -20,15 +20,14 @@ iframe#iframe {display:none; width:100%; overflow-y:scroll;}
     <button onclick="tutorial()">Tutorial</button>
 <hr />
 <textarea id="html"></textarea>
-<hr />
-<button onclick="parseHTML()" title="generates JS code from your HTML mark-up">html2dom</button>
-<button onclick="evalParsedHTML()" titles="generate HTML code by calling eval()">try the html2dom result</button>
-<button onclick="compareNodes()" title="check if our JS generated HTML that looks like yours">compare input/result HTML</button>
-<button onclick="viewHTML()" title="render our generated HTML (breaks the comparison feature)">render parsed HTML</button>
+<button onclick="parseHTML()" title="generates JS code from your HTML mark-up">html2dom&blacktriangledown;</button>
 <hr />
 <textarea id="domjs"></textarea>
+<button onclick="evalParsedHTML()" titles="generate HTML code by calling eval()">try the html2dom result&blacktriangledown;</button>
+<button onclick="compareNodes()" title="check if our JS generated HTML that looks like yours">compare input/result HTML&diams;</button>
 <hr />
 <textarea id="resulthtml"></textarea>
+<button onclick="viewHTML()" title="render our generated HTML">preview HTML&blacktriangledown;</button>
 <hr />
 <iframe id="iframe" src="data:text/html;charset=utf-8,<div id='container'></div>" sandbox="allow-same-origin"></iframe>
 
