@@ -22,7 +22,7 @@
 
 
 ///////////////////////////////////////////////////////////////////////////
-module("eval() after html2dom matches given html");
+module("html2dom(dom2html(html)) =?= html");
 
 function parse_n_compare(assert, given_html) {
 	// Assertion for making sure that our JS generates similar-looking html
@@ -49,23 +49,36 @@ asyncTest('Comment', function(assert) {
 });
 
 ///////////////////////////////////////////////////////////////////////////
-module("html2dom variable naming");
+module("html2dom.parse() variable naming");
 test("Naming by `id` attribute", function(assert) {
-	js = html2dom.parse('<p id="greeting">y helo thar!</p>');
+	var js = html2dom.parse('<p id="greeting">y helo thar!</p>');
 	ok( (js.indexOf("var greeting = document.createElement('P');") != -1) );
 });
 test("Don't accept invalid characters for variable names", function(assert) {
-	js = html2dom.parse('<p id="greet/in&foo">y helo thar!</p>');
+	var js = html2dom.parse('<p id="greet/in&foo">y helo thar!</p>');
 	ok( (js.indexOf("var greet/in&foo") == -1) , js);
 });
 
 test("Avoid duplicate names", function(assert) {
-	js = html2dom.parse('<p>y helo thar!</p><span id="p">y helo thar!</span>');
+	var js = html2dom.parse('<p>y helo thar!</p><span id="p">y helo thar!</span>');
 	ok( (js.indexOf("var p =") == js.lastIndexOf("var p =")) ,js);
 });
 
 
 
+module("html2dom API completeness");
+test("Are all required APIs exposed?", function (assert) {
+	var arr = Object.getOwnPropertyNames(html2dom);
+	var apis = ["parse", "html2dom", "strToSrc", "dom2html"];
+	console.log(apis, arr);
+	var cool = 0;
+	for (var i = 0; i < apis.length; i++) {
+		if (arr.indexOf(apis[i]) != -1) { cool++; }
+	}
+	ok(cool == apis.length, "properties of html2dom contain parse, html2dom, strToSrc, and dom2html");
+
+
+});
 
 
 </script>
