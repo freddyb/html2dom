@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>QUnit basic example</title>
+<link rel="stylesheet" href="qunit/qunit-1.11.0.css">
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture">
+
+<iframe id="iframe" src="data:text/html;charset=utf-8,<div id='container'></div>" sandbox="allow-same-origin"></iframe>
+
+</div>
+<script src="qunit/qunit-1.11.0.js"></script>
+<script src="qunit/qunit-assert-html.min.js"></script>
+
+<script src="../js/html2dom.js"></script>
+<script src="../js/main.js"></script>
+<script>
+
+
+
+///////////////////////////////////////////////////////////////////////////
+module("eval() after html2dom matches given html");
+
+function parse_n_compare(assert, given_html) {
+	// Assertion for making sure that our JS generates similar-looking html
+	var js_parsed = html2dom.parse(given_html);
+	function callback(result_html) {
+		assert.htmlEqual(given_html, result_html, "HTML matches:'" + given_html+ "' == '"+ result_html +"'");
+		start();
+	}
+	function errback(e) { ok(false, "Error Callback for dom2html should never be called."); }
+	html2dom.dom2html(js_parsed, callback, errback);
+}
+
+
+asyncTest('Tutorial', function(assert) {
+	parse_n_compare(assert,'<table border=4 cellspacing=4 cellpadding=4><tr><td bgcolor="#ffff00">yellow stars<td bgcolor="#00ff00">green clovers</tr><tr><td bgcolor="#ff00ff">purple moons<td bgcolor="00ffff">blue something or other...</td></tr></table>');
+});
+
+asyncTest('Entities', function(assert) {
+	parse_n_compare(assert, '<p> Entities € &euro; </p>');
+});
+
+asyncTest('Comment', function(assert) {
+	parse_n_compare(assert, 'Co<!-- Foo -->mment');
+});
+
+///////////////////////////////////////////////////////////////////////////
+module("html2dom variable naming");
+test("Naming by `id` attribute", function(assert) {
+	js = html2dom.parse('<p id="greeting">y helo thar!</p>');
+	ok( (js.indexOf("var greeting = document.createElement('P');") != -1) );
+});
+test("Don't accept invalid characters for variable names", function(assert) {
+	js = html2dom.parse('<p id="greet/in&foo">y helo thar!</p>');
+	ok( (js.indexOf("var greet/in&foo") == -1) , js);
+});
+
+test("Avoid duplicate names", function(assert) {
+	js = html2dom.parse('<p>y helo thar!</p><span id="p">y helo thar!</span>');
+	ok( (js.indexOf("var p =") == js.lastIndexOf("var p =")) ,js);
+});
+
+
+
+
+
+</script>
+</body>
+</html>
