@@ -5,18 +5,13 @@ function parseHTML() {
   document.querySelector("#domjs").value = x;
 }
 function evalParsedHTML() {
-  parseHTML();
+  //parseHTML();
   document.querySelector("#resulthtml").style.border = "";
-  var iframe = document.querySelector("#iframe");
-  iframe.onload = function() {
-    eval(document.querySelector("#domjs").value);// magic :D
-    var iframe = document.querySelector("#iframe");
-    //iframe.location.href = 'data:text/html,<div id="container"></div>';
-    iframe.contentWindow.container.appendChild(docFragment);
-    // ^--- once we do this, there might not be a body element anymore :S
-    document.querySelector("#resulthtml").value = iframe.contentWindow.container.innerHTML;
-  };
-  iframe.contentWindow.location.reload();
+
+  html2dom.dom2html(document.querySelector("#domjs").value,  function callback(html) {
+    document.querySelector("#resulthtml").value = html;
+    });
+
 }
 
 function viewHTML() {

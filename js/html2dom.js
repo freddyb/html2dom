@@ -5,7 +5,32 @@ var html2dom = (function() {
     values without quotation mark will probably get quotes. Single quotes might be turned into double quotes.
   */
 
-  return { parse: parse, strToSrc: strToSrc };
+  return { parse: parse, html2dom: parse, strToSrc: strToSrc, dom2html: dom2html };
+
+  function dom2html(js, callback, errback) {
+    // takes JS source and executes it to get HTML from it.
+
+    _iframe = document.getElementById('iframe');
+    if (_iframe == null) { errback('This function requires this iframe attribute in the DOM: iframe id="iframe" src="data:text/html;charset=utf-8,<div id=\'container\'></div>" sandbox="allow-same-origin"></iframe>'); }
+    // _iframe.sandbox = "allow-same-origin";
+    // _iframe.src = "data:text/html;charset=utf-8,<div id='container'></div>";
+
+    _iframe.onload = function() {
+      this.contentWindow.eval(js);// magic :D
+      this.contentWindow.container.appendChild(this.contentWindow.docFragment);
+      // ^--- once we do this, there might not be a body element anymore :S
+      if (typeof callback == "function") {
+        callback(this.contentWindow.container.innerHTML);
+      }
+    };
+    _iframe.onerror = function(err) {
+      if (typeof errback == "function") {
+        errback(err);
+      }
+    }
+    // _iframe.contentWindow.location.reload();
+    _iframe.src = "data:text/html;charset=utf-8,<div id='container'></div>";
+  }
 
   function parse(htmlsource) {
     if (typeof DOMParser == "function") {
@@ -57,7 +82,7 @@ function mkId(node) {
     src += ("\nvar " + node.h2d_nodeID + " = document.createElement('" + el_name +"');\n");
   }
   function newAttribute(node, attr,val) {
-    /XXX TODO: use el.id = .. instead of el.setAttribute("id", ..) for those attributes that allow it.
+    //XXX TODO: use el.id = .. instead of el.setAttribute("id", ..) for those attributes that allow it.
     if (attr.indexOf("on") == 0) { //XXX use a more generic way than this hard coded blacklist
       src += "//XXX CSP will forbid inline JavaScript and event handlers. Use addEventHandler instead!\n";
     }
