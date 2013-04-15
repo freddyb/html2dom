@@ -8,14 +8,14 @@ JavaScript library to parse HTML mark-up and convert it into DOM calls.
 See this HTML?
 
 ``` html
-<p id="greeting">Hello<b>World</b</p>
+<p id="greeting">Hello<b>World</b></p>
 ```
 
 What if we wanted add this to a document using JS?
 Let's use html2dom for that!
 ``` js
 // this returns a stupid javascript object:
-h2d = html2dom.parse('<p id="greeting">Hello<b>World</b</p>');
+h2d = html2dom.parse('<p id="greeting">Hello<b>World</b></p>');
 
 // its 'res' attribute contains the generated JavaScript source code:
 console.log(h2d.res);
@@ -46,7 +46,7 @@ And, do you know what? We also use that for our [tests](http://freddyb.github.co
 html2dom renders to the HTML we have supplied in the first place. Nifty, eh?
 
 ``` js
-var inp = '<p id="greeting">Hello<b>World</b</p>';
+var inp = '<p id="greeting">Hello<b>World</b></p>';
 var js = html2dom.parse(inp);
 html2dom.dom2html(js, function callback(res) {
 	console.log("Input:", inp);
@@ -57,7 +57,7 @@ html2dom.dom2html(js, function callback(res) {
 And hooray, this results is:
 
 ``` html
-Input: <p id="greeting">Hello<b>World</b</p>
+Input: <p id="greeting">Hello<b>World</b></p>
 Result: <p id="greeting">Hello<b>World</b></p>
 ```
 
@@ -97,7 +97,7 @@ What if we wanted add this to a document using JS?
 Let's use html2dom for that!
 ``` js
 // this returns a stupid javascript object:
-h2d = html2dom('<p>Hello<b>World</b</p>');
+h2d = html2dom('<p>Hello<b>World</b></p>');
 
 // it's res attribute contains the generated JavaScript source code:
 console.log(h2d.res);
