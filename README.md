@@ -8,13 +8,13 @@ JavaScript library to parse HTML mark-up and convert it into DOM calls.
 See this HTML?
 
 ``` html
-<p id="greeting">Hello<b>World</b></p>
+<p id="greeting">Hello <b>World</b></p>
 ```
 
 What if we wanted add this to a document using JavaScript?
 Let's use html2dom for that!
 ``` js
-var h2d = html2dom.parse('<p id="greeting">Hello<b>World</b></p>');
+var h2d = html2dom.parse('<p id="greeting">Hello <b>World</b></p>');
 console.log(h2d);
 ```
 
@@ -25,7 +25,7 @@ var docFragment = document.createDocumentFragment(); // contains all gathered no
 var greeting = document.createElement('P');
 greeting.setAttribute("id","greeting");
 docFragment.appendChild(greeting);
-var text = document.createTextNode("Hello");
+var text = document.createTextNode("Hello ");
 greeting.appendChild(text);
 var b = document.createElement('B');
 greeting.appendChild(b);
@@ -43,7 +43,7 @@ And, do you know what? We also use that for our [tests](http://freddyb.github.co
 html2dom renders the HTML we have supplied in the first place. Nifty, eh?
 
 ``` js
-var inp = '<p id="greeting">Hello<b>World</b></p>';
+var inp = '<p id="greeting">Hello <b>World</b></p>';
 var js = html2dom.parse(inp);
 html2dom.dom2html(js, function callback(res) {
 	console.log("Input:", inp);
@@ -54,8 +54,8 @@ html2dom.dom2html(js, function callback(res) {
 And hooray, this results is:
 
 ``` html
-Input: <p id="greeting">Hello<b>World</b></p>
-Result: <p id="greeting">Hello<b>World</b></p>
+Input: <p id="greeting">Hello <b>World</b></p>
+Result: <p id="greeting">Hello <b>World</b></p>
 ```
 
 
