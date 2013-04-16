@@ -3,6 +3,19 @@
 JavaScript library to parse HTML mark-up and convert it into DOM calls.
 
 
+More and more people use JavaScript to manipulate the DOM. Naturally
+this can pose a security risk as soon as user input is involved:
+Embedding user input can easily lead to Cross Site Scripting (XSS).
+Having a clean JavaScript codebase that seperates HTML elements and text
+can mitigating that risk by treating user data as non-HTML content.
+html2dom helps you to to enforce a stricter seperation betwwen HTML and
+text. Using the library will enable you to transform your big fat
+assignment to innerHTML into multiple simple DOM calls.
+A useful side-effect is, that browsers won't have to run a HTML parser
+on your long HTML strings which might even improve your website
+performance.
+
+
 ## Example 1: Turn HTML into JavaScript that calls DOM Methods
 
 See this HTML?
@@ -57,16 +70,6 @@ And hooray, this results is:
 Input: <p id="greeting">Hello <b>World</b></p>
 Result: <p id="greeting">Hello <b>World</b></p>
 ```
-
-
-## ...but why all this?
-People like to use innerHTML and this sucks.
-
-* innerHTML is bad for performance
-* the browser will have to parse a static string on a per-runtime basis
-* starting off with DOM code will make it easier to seperate text and mark-up
-* mixing user input with text nodes is not as harmful as doing this with innerHTML (hint: DOM XSS)
-
 ## Demo?
 
 [Demo.](http://freddyb.github.com/html2dom/)
