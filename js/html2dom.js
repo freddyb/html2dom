@@ -92,7 +92,7 @@ function mkId(node) {
     if (attr == "style") { //XXX use a more generic way than this hard coded blacklist
       src += "//XXX CSP will forbid inline styles. Use ``"+ node.h2d_nodeID + ".style'' instead of setAttribute.\n";
     }
-      src += ( node.h2d_nodeID + ".setAttribute(" + strToSrc(attr) + ","+ strToSrc(val) +");\n");
+      src += ( node.h2d_nodeID + ".setAttribute(" + strToSrc(attr) + ", "+ strToSrc(val) +");\n");
   }
   function newText(node, text) {
     if (!("h2d_nodeID" in node)) { mkId(node); }
