@@ -4,13 +4,15 @@ var html2dom = (function() {
   * It's also fairly certain that your html will be mutated. Attributes might shift positions and attribute
     values without quotation mark will probably get quotes. Single quotes might be turned into double quotes.
   */
-
+  var cnt = 0;
+  var ids = {};
+  var src = ""
   return { parse: parse, html2dom: parse, strToSrc: strToSrc, dom2html: dom2html };
 
   function dom2html(js, callback, errback) {
     // takes JS source and executes it to get HTML from it.
 
-    _iframe = document.getElementById('iframe');
+    var _iframe = document.getElementById('iframe');
     if (_iframe == null) { errback('This function requires this iframe attribute in the DOM: iframe id="iframe" src="data:text/html;charset=utf-8,<div id=\'container\'></div>" sandbox="allow-same-origin"></iframe>'); }
     // _iframe.sandbox = "allow-same-origin";
     // _iframe.src = "data:text/html;charset=utf-8,<div id='container'></div>";
@@ -41,10 +43,11 @@ var html2dom = (function() {
     else {
       throw Error("Your JS environment doesn't come with either of the supported parsers (document.createDocumentFragment or DOMParser)");
     }
-
-    cnt = 0;
+    // reset state..
+    src = "";
     ids = {};
-    src = ""
+    cnt = 0;
+
     //TODO work around the body thing...
     walkNodes(doc.body); // using body because domparser always creates html, head, body
     return src;
