@@ -23,7 +23,7 @@ This will give us:
 ``` js
 var docFragment = document.createDocumentFragment(); // contains all gathered nodes
 var greeting = document.createElement('P');
-greeting.setAttribute("id","greeting");
+greeting.setAttribute("id", "greeting");
 docFragment.appendChild(greeting);
 var text = document.createTextNode("Hello ");
 greeting.appendChild(text);
