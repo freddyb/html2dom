@@ -41,12 +41,25 @@ asyncTest('Tutorial', function(assert) {
 });
 
 asyncTest('Entities', function(assert) {
-	parse_n_compare(assert, '<p> Entities € &euro; </p>');
+	parse_n_compare(assert, '<p>Entities € &euro;</p>');
 });
 
 asyncTest('Comment', function(assert) {
 	parse_n_compare(assert, 'Co<!-- Foo -->mment');
 });
+
+asyncTest("Clears stupid whitespaces", function(assert) {
+	var whitespacey = '<p>\n\n<span data-l10n-id="error-message">\n            MESSAGE </span> \n        </p> ';
+	var js_parsed = html2dom.parse(whitespacey);
+	function callback(result_html) {
+		var not_so_spacey = '<p><span data-l10n-id="error-message">\n            MESSAGE </span></p> ';
+		assert.htmlEqual(result_html, not_so_spacey, "HTML matches:'" + not_so_spacey + "' == '"+ result_html +"'");
+		start();
+	}
+	function errback(e) { ok(false, "Failed parsing whitespacey html2dom output. This shouldn't happen."); }
+	html2dom.dom2html(js_parsed, callback, errback);
+});
+
 
 ///////////////////////////////////////////////////////////////////////////
 module("html2dom.parse() variable naming");
