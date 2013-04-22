@@ -52,7 +52,7 @@ asyncTest("Clears stupid whitespaces", function(assert) {
 	var whitespacey = '<p>\n\n<span data-l10n-id="error-message">\n            MESSAGE </span> \n        </p> ';
 	var js_parsed = html2dom.parse(whitespacey);
 	function callback(result_html) {
-		var not_so_spacey = '<p><span data-l10n-id="error-message">\n            MESSAGE </span></p> ';
+		var not_so_spacey = '<p><span data-l10n-id="error-message"> MESSAGE </span></p> ';
 		assert.htmlEqual(result_html, not_so_spacey, "HTML matches:'" + not_so_spacey + "' == '"+ result_html +"'");
 		start();
 	}

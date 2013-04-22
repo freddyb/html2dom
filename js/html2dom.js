@@ -144,7 +144,7 @@ function mkId(node) {
              * white-space: pre, pre-wrap or pre-line
              * see http://stackoverflow.com/questions/15361012/extract-whitespace-collapsed-text-from-html-as-it-would-be-rendered
             */
-            cleaned = node.textContent.replace(/\s+/,' ')
+            var cleaned = node.textContent.replace(/\s+/,' ')
             newText(node, cleaned);
             if (parentName != undefined) { appendToParent(parentName, node); }
           }
