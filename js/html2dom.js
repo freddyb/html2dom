@@ -137,9 +137,15 @@ function mkId(node) {
           if (parentName != undefined) { appendToParent(parentName, node); }
         }
         else if (node.nodeType == Node.TEXT_NODE) {
+          // skips whitespace-only text nodes:
           if (/\S/.test(node.textContent)) {
-          // skips whitespace-only
-            newText(node, node.textContent);
+            /* remove duplicate whitespaces..
+             * XXX this is wrong for pre-tags and tags with style
+             * white-space: pre, pre-wrap or pre-line
+             * see http://stackoverflow.com/questions/15361012/extract-whitespace-collapsed-text-from-html-as-it-would-be-rendered
+            */
+            cleaned = node.textContent.replace(/\s+/,' ')
+            newText(node, cleaned);
             if (parentName != undefined) { appendToParent(parentName, node); }
           }
         }
