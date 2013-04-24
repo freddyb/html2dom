@@ -72,10 +72,15 @@ function mkId(node) {
     }
   }
   function strToSrc(s) {
-    // String.toSource() gives us (new String("foobar")), this is a bit ugly.
-    // the upside is, that it does string escaping for us.
-    // so we use String.toSource() and regex-search for the inner part.
-    return ( s.toSource() ).match(/\(new String\((.+)\)\)/)[1];
+    /* String.toSource() gives us (new String("foobar")), this is a bit ugly.
+     * the upside is, that it does string escaping for us.
+     * so we use String.toSource() and regex-search for the inner part.
+    */
+    var newSrc = ( s.toSource() ).match(/\(new String\((.+)\)\)/)[1];
+    // replace masked Identifiers:
+    // e.g., "I want $$candy$$" --> "I want "+ candy
+    newSrc = newSrc.replace(/\$\$([^"$]+)\$\$/g, '"+ $1 +"');
+    return newSrc
   }
   function newElement(node , el_name) {
     if (!("h2d_nodeID" in node)) { mkId(node); }
