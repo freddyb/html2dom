@@ -157,7 +157,7 @@ function mkId(node) {
   }
 
   function walkNodes(root) {
-    var iter = document.createNodeIterator(root);
+    var iter = document.createNodeIterator(root, NodeFilter.SHOW_ALL, null, false);
     var node;
     while (node = iter.nextNode()) {
         var nodeDescr = node +', name: '+ node.nodeName + ', type: ' + node.nodeType;
