@@ -129,8 +129,8 @@ function mkId(node) {
   }
   function newElement(node , el_name) {
     if (!("h2d_nodeID" in node)) { mkId(node); }
-    if (el_name == "script") { //XXX use a more generic way than this hard coded blacklist
-      src += "//XXX CSP will forbid inline JavaScript.\n";
+    if (el_name == "SCRIPT") { //XXX use a more generic way than this hard coded blacklist
+      src += "//XXX CSP will forbid inline JavaScript!\n";
     }
     src += ("\nvar " + node.h2d_nodeID + " = document.createElement('" + el_name +"');\n");
   }
