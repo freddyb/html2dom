@@ -121,7 +121,8 @@ var html2dom = (function() {
     return s.replace(/[<>&'"\/]/gi, function(c) {return '&#x'+c.charCodeAt(0).toString(16)+';' });
   }
   function strToSrc(s) {
-    /* String.toSource() gives us (new String("foobar")), this is a bit ugly.
+    /* If the browser has JSON support, we can just JSON.stringify() to get a properly quoted string back.
+     * If not: String.toSource() gives us (new String("foobar")), this is a bit ugly.
      * the upside is, that it does string escaping for us.
      * so we use String.toSource() and regex-search for the inner part.
      */
@@ -131,10 +132,10 @@ var html2dom = (function() {
     }
     else {
       newSrc = ( s.toSource() ).match(/\(new String\((.+)\)\)/)[1];
-      // replace masked Identifiers:
-      // e.g., "I want $$candy$$" --> "I want "+ candy
-      newSrc = newSrc.replace(/\$\$([^"$]+)\$\$/g, '"+ $1 +"');
     }
+    // replace masked Identifiers:
+    // e.g., "I want $$candy$$" --> "I want "+ candy
+    newSrc = newSrc.replace(/\$\$([^"$]+)\$\$/g, '"+ $1 +"');
     return newSrc
   }
   function newElement(node, el_name) {
@@ -173,7 +174,7 @@ var html2dom = (function() {
     while (node = iter.nextNode()) {
       var nodeDescr = node +', name: '+ node.nodeName + ', type: ' + node.nodeType;
       if (node.nodeValue != null) {
-        nodeDescr += ', value:' + node.nodeValue.toSource();
+        nodeDescr += ', value:' + strToSrc(node.nodeValue);
       }
       if (node == root) {
         if (src.indexOf("docFragment") != 0) {
