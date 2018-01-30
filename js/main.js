@@ -1,3 +1,4 @@
+"use strict";
 // nodes = []; // debug
 function parseHTML() {
   document.querySelector("#domjs").style.border = "";

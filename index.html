@@ -1,38 +1,35 @@
 <!DOCTYPE html>
-<html
+<html>
     <head>
         <meta http-equiv="Content-Type" content="text/xhtml;charset=utf-8" />
         <title></title>
         <script src="js/html2dom.js"></script>
         <script src="js/main.js"></script>
-
-<!--
-most HTML and script-things for this page to demo html2dom.js was
-<del>stolen</del>adapted from mario's innerHTML test-tool
-at html5sec.org/innerhtml - thaaaaanks :D
--->
-<style>
-#domjs, #resulthtml, #html {width:100%;height:175px;overflow-y:scroll}
-iframe#iframe {display:none; width:100%; overflow-y:scroll;}
-.tutorial { font-style: italic; font-size: small; display:none;}
-</style>
-</head>
+        <style>
+          #domjs, #resulthtml, #html {width:100%;height:175px;overflow-y:scroll}
+          iframe#iframe {display:none; width:100%; overflow-y:scroll;}
+          .tutorial { font-style: italic; font-size: small; display:none;}
+        </style>
+    </head>
 <body>
-    <button onclick="tutorial()">Tutorial</button><span class="tutorial">&nbsp;Modify or enter some custom HTML below.</span>
-<hr />
+<button onclick="tutorial()">Tutorial</button>
+<span class="tutorial">&nbsp;Modify or enter some custom HTML below.</span>
+<hr/>
 <textarea id="html"></textarea>
-<button onclick="parseHTML()" title="generates JS code from your HTML mark-up">html2dom&blacktriangledown;</button><span class="tutorial">&nbsp;Generate DOM methods that would generate the given HTML source code..</span>
-<hr />
+<button onclick="parseHTML()" title="generates JS code from your HTML mark-up">html2dom&blacktriangledown;</button>
+<span class="tutorial">&nbsp;Generate DOM methods that would generate the given HTML source code..</span>
+<hr/>
 <textarea id="domjs"></textarea>
 <button onclick="evalParsedHTML()" title="generate HTML code by calling eval()">try executing the html2dom result&blacktriangledown;</button>
 <span class="tutorial">&nbsp;View the HTML that would result from executing the JavaScript code from above.</span>
-<hr />
+<hr/>
 <textarea id="resulthtml"></textarea>
 <button onclick="viewHTML()" title="render our generated HTML">preview HTML&blacktriangledown;</button>
-<button onclick="compareNodes()" title="check if our JS generated HTML that looks like yours">compare input/result HTML&diams;</button><br>
+<button onclick="compareNodes()" title="check if our JS generated HTML that looks like yours">compare input/result HTML&diams;</button>
+<br>
 <span class="tutorial">&nbsp;Preview the the HTML from above (images and styles are likely broken if URLs were relative or compare if the both HTML source code are the same.</span><br>
 
-<hr />
+<hr/>
 <iframe id="iframe" src="data:text/html;charset=utf-8,<div id='container'></div>" sandbox="allow-same-origin"></iframe>
 
 <script>
@@ -42,7 +39,9 @@ var domjs = document.getElementById('domjs');
 var iframe = document.getElementById('iframe');
 var resulthtml = document.getElementById('resulthtml');
 
-location.hash.length > 1 ? html.value = unescape(location.hash.slice(1)) : false;
+
+
+html.value = location.hash.length > 1 ? unescape(location.hash.slice(1)) : '';
 location.hash = '';
 
 var updateCanvas = function(e){
@@ -58,6 +57,5 @@ html.onkeyup = updateCanvas;
 window.onload = updateCanvas;
 </script>
 
-<a href="https://github.com/freddyb/html2dom"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
 </body>
 </html>
