@@ -6,14 +6,14 @@ let html2dom = (function() {
    values without quotation mark will probably get quotes. Single quotes might be turned into double quotes.
    */
 
-  var ids = {};
-  var src = "";
+  let ids = {};
+  let src = "";
   return { parse: parse, html2dom: parse, strToSrc: strToSrc, dom2html: dom2html };
 
   function dom2html(js, callback, errback) {
     // takes JS source and executes it to get HTML from it.
 
-    var _iframe = document.getElementById("iframe");
+    let _iframe = document.getElementById("iframe");
     if (_iframe == null) { errback("This function requires this iframe attribute in the DOM: iframe id=\"iframe\" src=\"data:text/html;charset=utf-8,<div id='container'></div>\" sandbox=\"allow-same-origin\"></iframe>"); }
     // _iframe.sandbox = "allow-same-origin";
     // _iframe.src = "data:text/html;charset=utf-8,<div id='container'></div>";
@@ -38,7 +38,7 @@ let html2dom = (function() {
   function parse(htmlsource) {
     if (typeof DOMParser == "function") {
       // a bit more heavy-weight and Firefox only (this is OK for b2g things ;))
-      var parser = new DOMParser();
+      let parser = new DOMParser();
       var doc = parser.parseFromString(htmlsource, "text/html");
     }
     else {
@@ -54,7 +54,7 @@ let html2dom = (function() {
   }
 
   function mkId(node) {
-    var name = node.nodeName.replace(/[^a-zA-Z0-9]/g,"");
+    let name = node.nodeName.replace(/[^a-zA-Z0-9]/g,"");
     if ((node.nodeType == Node.ELEMENT_NODE) && (node.hasAttribute("id"))) {
       name = node.id.replace(/[^a-zA-Z0-9]/g,"");
     }
@@ -62,7 +62,7 @@ let html2dom = (function() {
     //TODO: replace h2d_nodeID attribute with a WeakMap, once browser support it.
     Object.defineProperty(node, "h2d_nodeID", {configurable:true, writable:true}); // this looks like an awful hack. in fact...it is! :/
     if (name in ids) {
-      var i = ids[name].length -1;
+      let i = ids[name].length -1;
       ids[name].push(name +"_"+i);
       node.h2d_nodeID = name +"_"+i;
     }
@@ -83,7 +83,7 @@ let html2dom = (function() {
      * the upside is, that it does string escaping for us.
      * so we use String.toSource() and regex-search for the inner part.
      */
-    var newSrc;
+    let newSrc;
     if (typeof JSON != "undefined") {
       newSrc = JSON.stringify(s); // this works quite great on strings :)
     }
@@ -126,11 +126,11 @@ let html2dom = (function() {
   }
 
   function walkNodes(root) {
-    var iter = document.createNodeIterator(root, NodeFilter.SHOW_ALL, null, false);
-    var node;
+    let iter = document.createNodeIterator(root, NodeFilter.SHOW_ALL, null, false);
+    let node;
     // eslint-disable-next-line no-cond-assign
     while (node = iter.nextNode()) {
-      var nodeDescr = node +", name: "+ node.nodeName + ", type: " + node.nodeType;
+      let nodeDescr = node +", name: "+ node.nodeName + ", type: " + node.nodeType;
       if (node.nodeValue != null) {
         nodeDescr += ", value:" + strToSrc(node.nodeValue);
       }
@@ -149,9 +149,9 @@ let html2dom = (function() {
       if (node.nodeType == Node.ELEMENT_NODE) { // ELEMENT_NODE == 1
         newElement(node, node.nodeName);
         // let's replace attributes
-        for (var j=0;j<node.attributes.length;j++) {
-          var a = node.attributes[j].name;
-          var v = node.attributes[j].value;
+        for (let j=0;j<node.attributes.length;j++) {
+          let a = node.attributes[j].name;
+          let v = node.attributes[j].value;
           newAttribute(node, a, v);
         }
         if (parentName != undefined) { appendToParent(parentName, node); }
@@ -164,7 +164,7 @@ let html2dom = (function() {
            * white-space: pre, pre-wrap or pre-line
            * see http://stackoverflow.com/questions/15361012/extract-whitespace-collapsed-text-from-html-as-it-would-be-rendered
            */
-          var cleaned = node.textContent.replace(/\s+/," ");
+          let cleaned = node.textContent.replace(/\s+/," ");
           newText(node, cleaned);
           if (parentName != undefined) { appendToParent(parentName, node); }
         }

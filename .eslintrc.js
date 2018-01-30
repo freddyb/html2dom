@@ -26,6 +26,7 @@ module.exports = {
             "error",
             "always"
         ],
-        "no-console": "warn"
+        "no-console": "warn",
+        "no-var": "error"
     }
 };
