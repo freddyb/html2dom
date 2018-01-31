@@ -157,17 +157,7 @@ let html2dom = (function() {
         if (parentName != undefined) { appendToParent(parentName, node); }
       }
       else if (node.nodeType == Node.TEXT_NODE) {
-        // skips whitespace-only text nodes:
-        if (/\S/.test(node.textContent)) {
-          /* remove duplicate whitespaces..
-           * XXX this is wrong for pre-tags and tags with style
-           * white-space: pre, pre-wrap or pre-line
-           * see http://stackoverflow.com/questions/15361012/extract-whitespace-collapsed-text-from-html-as-it-would-be-rendered
-           */
-          let cleaned = node.textContent.replace(/\s+/," ");
-          newText(node, cleaned);
-          if (parentName != undefined) { appendToParent(parentName, node); }
-        }
+        src += `${parentName}.append(${strToSrc(node.textContent)});\n`;
       }
       else if (node.nodeType == Node.COMMENT_NODE){ // 3
         newComment(node, node.nodeValue);
