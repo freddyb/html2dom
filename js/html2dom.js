@@ -1,4 +1,4 @@
-let html2dom = (function() {
+var html2dom = (function() {
   "use strict";
   /*
    * There is no guarantee as to what might happen if the things supplied to html2dom are not valid html.
@@ -13,7 +13,12 @@ let html2dom = (function() {
   var q = "'";
   var decl = "let";
 
-  return { parse: parse, html2dom: parse, strToSrc: strToSrc, dom2html: dom2html };
+  return {
+    parse: parse,
+    html2dom: parse,
+    strToSrc: strToSrc,
+    dom2html: dom2html
+  };
 
   function dom2html(js, callback, errback) {
     // takes JS source and executes it to get HTML from it.
