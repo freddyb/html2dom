@@ -65,16 +65,16 @@ asyncTest("Clears stupid whitespaces", function(assert) {
 module("html2dom.parse() variable naming");
 test("Naming by `id` attribute", function(assert) {
 	var js = html2dom.parse('<p id="greeting">y helo thar!</p>');
-	ok( (js.indexOf("var greeting = document.createElement('P');") != -1) );
+	ok( (js.indexOf('let greeting = document.createElement("p");') != -1) );
 });
 test("Don't accept invalid characters for variable names", function(assert) {
 	var js = html2dom.parse('<p id="greet/in&foo">y helo thar!</p>');
-	ok( (js.indexOf("var greet/in&foo") == -1) , js);
+	ok( (js.indexOf("let greet/in&foo") == -1) , js);
 });
 
 test("Avoid duplicate names", function(assert) {
 	var js = html2dom.parse('<p>y helo thar!</p><span id="p">y helo thar!</span>');
-	ok( (js.indexOf("var p =") == js.lastIndexOf("var p =")) ,js);
+	ok( (js.indexOf("let p =") == js.lastIndexOf("let p =")) ,js);
 });
 
 

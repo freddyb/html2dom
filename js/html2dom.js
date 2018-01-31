@@ -8,6 +8,11 @@ let html2dom = (function() {
 
   let ids = {};
   let src = "";
+
+  // config for output
+  var q = "'";
+  var decl = "let";
+
   return { parse: parse, html2dom: parse, strToSrc: strToSrc, dom2html: dom2html };
 
   function dom2html(js, callback, errback) {
@@ -36,14 +41,8 @@ let html2dom = (function() {
   }
 
   function parse(htmlsource) {
-    if (typeof DOMParser == "function") {
-      // a bit more heavy-weight and Firefox only (this is OK for b2g things ;))
-      let parser = new DOMParser();
-      var doc = parser.parseFromString(htmlsource, "text/html");
-    }
-    else {
-      throw Error("Your JS environment doesn't come with either of the supported parsers (document.createDocumentFragment or DOMParser)");
-    }
+    let parser = new DOMParser();
+    let doc = parser.parseFromString(htmlsource, "text/html");
     // reset state..
     src = "";
     ids = {};
@@ -100,7 +99,7 @@ let html2dom = (function() {
     if (el_name == "SCRIPT") { //XXX use a more generic way than this hard coded blacklist
       src += "//XXX CSP will forbid inline JavaScript!\n";
     }
-    src += ("\nvar " + node.h2d_nodeID + " = document.createElement('" + el_name +"');\n");
+    src += `\n${decl} ${node.h2d_nodeID} = document.createElement(${strToSrc(el_name.toLowerCase())});\n`;
   }
   function newAttribute(node, attr, val) {
     //XXX TODO: use el.id = .. instead of el.setAttribute("id", ..) for those attributes that allow it.
@@ -111,18 +110,18 @@ let html2dom = (function() {
       src += "//XXX CSP will forbid inline styles. Use ``"+ node.h2d_nodeID + ".style'' instead of setAttribute.\n";
     }
     val = encodeForAttribute(val);
-    src += ( node.h2d_nodeID + ".setAttribute(" + strToSrc(attr) + ", "+ strToSrc(val) +");\n");
+    src += `${node.h2d_nodeID}.setAttribute(${strToSrc(attr)}, ${strToSrc(val)});\n`;
   }
   function newText(node, text) {
     if (!("h2d_nodeID" in node)) { mkId(node); }
-    src += ("var "+node.h2d_nodeID + " = document.createTextNode(" +  strToSrc(text) +");\n");
+    src += `${decl} ${node.h2d_nodeID} = document.createTextNode(${strToSrc(text)});\n`;
   }
   function newComment(node, cmt) {
     if (!("h2d_nodeID" in node)) { mkId(node); }
-    src += ("var "+node.h2d_nodeID +" = document.createComment(" +  strToSrc(cmt) +");\n");
+    src += `${decl} ${node.h2d_nodeID} = document.createComment(${strToSrc(cmt)});\n`;
   }
   function appendToParent(par, node) {
-    src += (par+".appendChild("+ node.h2d_nodeID +");\n");
+    src += `${par}.appendChild(${node.h2d_nodeID});\n`;
   }
 
   function walkNodes(root) {
@@ -136,7 +135,8 @@ let html2dom = (function() {
       }
       if (node == root) {
         if (src.indexOf("docFragment") != 0) {
-          src += "var docFragment = document.createDocumentFragment(); // contains all gathered nodes\n";
+          // FIXME replace var with let but find a way to address through frame.contentWindow.docFragment
+          src += `var docFragment = document.createDocumentFragment(); // contains all gathered nodes\n`;
           // set fixed id (hackish..)...
           Object.defineProperty(node, "h2d_nodeID", {configurable:true, writable:true});
           node.h2d_nodeID = "docFragment";
